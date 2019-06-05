@@ -9,15 +9,16 @@ from snakegame.game.snake import Snake
 
 class Motor:
     def __init__(self, snake_speed, map_size=600, snake_color=(255, 255, 255), background_color=(0, 0, 0),
-                 cell_size=15, frames_per_second=60, apple_color=(0, 255, 0)):
+                 cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5):
         self.map_size = map_size
         self.snake_speed = snake_speed
+        self.snake_initial_size = snake_initial_size
         self.snake_color = snake_color
         self.apple_color = apple_color
         self.background_color = background_color
         self.cell_size = cell_size
         self.frames_per_second = frames_per_second
-        self.snake = Snake(map_size, square_size=cell_size, speed=snake_speed)
+        self.snake = self.generate_snake()
         self.apple = self.generate_apple()
 
     def play_game(self):
@@ -28,7 +29,6 @@ class Motor:
         while not game_over:
 
             for event in pygame.event.get():
-
                 self.check_for_exit(event)
 
                 self.update_direction(event)
@@ -37,8 +37,9 @@ class Motor:
 
             self.snake.update_position()
             self.check_if_apple_has_been_eaten()
+            snake_is_dead = self.check_if_snake_is_dead()
 
-            if self.snake.alive is False:
+            if snake_is_dead:
                 game_over = True
                 pass
 
@@ -64,7 +65,7 @@ class Motor:
         segments = self.snake.get_segments()
         for segment in segments:
             pygame.draw.rect(screen, self.snake_color, (
-                segment.position_x, segment.position_y, self.snake.square_size, self.snake.square_size))
+                segment.position_x, segment.position_y, self.snake.cell_size, self.snake.cell_size))
 
     def draw_apple(self, screen):
         pygame.draw.rect(screen, self.apple_color, (
@@ -84,6 +85,15 @@ class Motor:
             position_y = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
         return Apple(position_x, position_y)
 
+    def generate_snake(self):
+        snake_direction = random.choice(["left", "right", "up", "down"])
+        snake_position = [random.randrange((self.snake_initial_size - 1) * self.cell_size,
+                                           self.map_size - self.snake_initial_size * self.cell_size, self.cell_size),
+                          random.randrange((self.snake_initial_size - 1) * self.cell_size,
+                                           self.map_size - self.snake_initial_size * self.cell_size, self.cell_size)]
+        snake = Snake(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
+        return snake
+
     def check_if_apple_has_been_eaten(self):
         segments = self.snake.get_segments()
         head_of_snake = segments[0]
@@ -96,3 +106,11 @@ class Motor:
     def check_for_exit(event):
         if event.type == pygame.QUIT:
             sys.exit()
+
+    def check_if_snake_is_dead(self):
+        head_of_the_snake = self.snake.get_segments()[0]
+        if head_of_the_snake.position_x < 0 or head_of_the_snake.position_x > (self.map_size - self.cell_size):
+            return True
+        if head_of_the_snake.position_y < 0 or head_of_the_snake.position_y > (self.map_size - self.cell_size):
+            return True
+        return False
