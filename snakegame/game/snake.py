@@ -1,4 +1,5 @@
 import random
+import copy
 
 
 class Snake:
@@ -45,7 +46,7 @@ class Snake:
             self.direction["y"] = 1
 
     def update_position(self):
-        if self.delay_counter == 10 - self.speed:
+        if self.delay_counter == 101 - self.speed:
             segments = self.body.get_segments()
             last_segment = segments.pop(-1)
             last_segment.position_x = segments[0].position_x + self.direction["x"] * self.square_size
@@ -55,11 +56,15 @@ class Snake:
             if last_segment.position_y < 0 or last_segment.position_y > (self.map_size - self.square_size):
                 self.alive = False
             segments.insert(0, last_segment)
+            self.delay_counter = 0
         else:
             self.delay_counter += 1
 
     def get_segments(self):
         return self.body.get_segments()
+
+    def add_a_segment(self):
+        self.body.add_a_segment()
 
 
 class Segment:
@@ -88,3 +93,8 @@ class Body:
 
     def get_segments(self):
         return self.list_of_segments
+
+    def add_a_segment(self):
+        last_segment = self.list_of_segments[-1]
+        copied_segment = copy.deepcopy(last_segment)
+        self.list_of_segments.append(copied_segment)

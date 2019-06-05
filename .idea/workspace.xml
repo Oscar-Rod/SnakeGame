@@ -2,12 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2464d98-3fc4-4a88-a4cf-079d2c1629f0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/snakegame/game/game.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/snakegame/game/motor.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/snakegame/game/snake.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/snakegame/game_tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/snakegame/game_tests/test_snake.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/snakegame/gamemotor/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/snakegame/gamemotor/game.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snakegame/game/apple.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/apple.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snakegame/game/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/game.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snakegame/game/motor.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/motor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snakegame/game/snake.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/snake.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,11 +23,11 @@
           <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/snakegame/game/game.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="9" column="62" selection-start-line="9" selection-start-column="62" selection-end-line="9" selection-end-column="62" />
+            <state relative-caret-position="165">
+              <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
             </state>
           </provider>
         </entry>
@@ -34,25 +35,41 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/snakegame/game/motor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="511">
-              <caret line="40" column="35" lean-forward="true" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
+            <state relative-caret-position="-403">
+              <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#0#13#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/snakegame/game/apple.py">
-          <provider selected="true" editor-type-id="text-editor" />
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+            <state relative-caret-position="60">
+              <caret line="4" column="9" lean-forward="true" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/snakegame/game_tests/test_snake.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/snakegame/game/apple.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -76,10 +93,12 @@
         <option value="$PROJECT_DIR$/snakegame/gamemotor/motor.py" />
         <option value="$PROJECT_DIR$/snakegame/gamemotor/snake.py" />
         <option value="$PROJECT_DIR$/snakegame/gamemotor/game.py" />
-        <option value="$PROJECT_DIR$/snakegame/game/motor.py" />
+        <option value="$PROJECT_DIR$/snakegame/game/apple.py" />
         <option value="$PROJECT_DIR$/snakegame/game/snake.py" />
         <option value="$PROJECT_DIR$/snakegame/game/game.py" />
-        <option value="$PROJECT_DIR$/snakegame/game/apple.py" />
+        <option value="$PROJECT_DIR$/snakegame/game/motor.py" />
+        <option value="$PROJECT_DIR$/snakegame/game/test_snake.py" />
+        <option value="$PROJECT_DIR$/snakegame/game_tests/test_snake.py" />
       </list>
     </option>
   </component>
@@ -113,6 +132,12 @@
               <item name="snakegame" type="462c0819:PsiDirectoryNode" />
               <item name="game" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="snakegame" type="b2602c69:ProjectViewProjectNode" />
+              <item name="snakegame" type="462c0819:PsiDirectoryNode" />
+              <item name="snakegame" type="462c0819:PsiDirectoryNode" />
+              <item name="game_tests" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -123,6 +148,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/snakegame/game_tests" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -136,7 +166,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python.game">
     <configuration name="game" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="snakegame" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -179,9 +209,44 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Unittests for snakegame.game_tests.test_snake.TestSnake" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="snakegame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/snakegame/game" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;snakegame.game_tests.test_snake.TestSnake&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unittests in test_snake.py" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
+      <module name="snakegame" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/snakegame/game_tests" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/snakegame/game_tests/test_snake.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.game" />
+      <item itemvalue="Python tests.Unittests for snakegame.game_tests.test_snake.TestSnake" />
+      <item itemvalue="Python tests.Unittests in test_snake.py" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.game" />
+        <item itemvalue="Python tests.Unittests in test_snake.py" />
+        <item itemvalue="Python tests.Unittests for snakegame.game_tests.test_snake.TestSnake" />
         <item itemvalue="Python.game" />
       </list>
     </recent_temporary>
@@ -199,6 +264,14 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="Unittests_for_test_snake_TestSnake - 2019.06.05 at 08h 45m 33s.xml">
+      <configuration name="Unittests for test_snake.TestSnake" configurationId="tests" />
+    </history-entry>
+    <history-entry file="Unittests_in_test_snake_py - 2019.06.05 at 08h 45m 51s.xml">
+      <configuration name="Unittests in test_snake.py" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
       <is-autoscroll-to-source value="true" />
@@ -212,35 +285,24 @@
     <frame x="-1" y="0" width="2560" height="1326" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.18013401" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.18013401" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.1856786" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4096586" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.19900084" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32972524" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32972524" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.32300162" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/snakegame/game/motor.py</url>
-          <line>55</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/snakegame/__init__.py">
@@ -270,32 +332,46 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/snakegame/game/game.py">
+    <entry file="file://$PROJECT_DIR$/snakegame/game/apple.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="9" column="62" selection-start-line="9" selection-start-column="62" selection-end-line="9" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="58" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="58" />
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/snakegame/game/motor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="511">
-          <caret line="40" column="35" lean-forward="true" selection-start-line="40" selection-start-column="35" selection-end-line="40" selection-end-column="35" />
+        <state relative-caret-position="-403">
+          <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#0#13#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/snakegame/game/apple.py">
-      <provider selected="true" editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="9" lean-forward="true" selection-start-line="4" selection-start-column="9" selection-end-line="4" selection-end-column="9" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/snakegame/game_tests/test_snake.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="26" selection-start-line="6" selection-start-column="26" selection-end-line="6" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/snakegame/game/game.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="12" lean-forward="true" selection-start-line="12" selection-end-line="12" />
+        </state>
+      </provider>
     </entry>
   </component>
 </project>
