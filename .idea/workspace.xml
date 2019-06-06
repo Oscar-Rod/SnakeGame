@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e2464d98-3fc4-4a88-a4cf-079d2c1629f0" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/snakegame/game/game.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/game.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/snakegame/game/motor.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/motor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/snakegame/game/snake.py" beforeDir="false" afterPath="$PROJECT_DIR$/snakegame/game/snake.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/snakegame/game/motor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="85" column="44" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
+            <state relative-caret-position="831">
+              <caret line="130" column="19" selection-start-line="130" selection-start-column="19" selection-end-line="130" selection-end-column="19" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -40,11 +38,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+            <state relative-caret-position="555">
+              <caret line="79" column="24" lean-forward="true" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -71,9 +69,9 @@
         <option value="$PROJECT_DIR$/snakegame/game/apple.py" />
         <option value="$PROJECT_DIR$/snakegame/game/test_snake.py" />
         <option value="$PROJECT_DIR$/snakegame/game_tests/test_snake.py" />
-        <option value="$PROJECT_DIR$/snakegame/game/motor.py" />
         <option value="$PROJECT_DIR$/snakegame/game/game.py" />
         <option value="$PROJECT_DIR$/snakegame/game/snake.py" />
+        <option value="$PROJECT_DIR$/snakegame/game/motor.py" />
       </list>
     </option>
   </component>
@@ -265,13 +263,13 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.4096586" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.24396336" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.19900084" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32972524" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.22231473" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.21778141" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -328,20 +326,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/snakegame/game/motor.py">
+    <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="85" column="44" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#13#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="555">
+          <caret line="79" column="24" lean-forward="true" selection-start-line="79" selection-start-column="24" selection-end-line="79" selection-end-column="24" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/snakegame/game/snake.py">
+    <entry file="file://$PROJECT_DIR$/snakegame/game/motor.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="30" column="28" lean-forward="true" selection-start-line="30" selection-start-column="28" selection-end-line="30" selection-end-column="28" />
+        <state relative-caret-position="831">
+          <caret line="130" column="19" selection-start-line="130" selection-start-column="19" selection-end-line="130" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

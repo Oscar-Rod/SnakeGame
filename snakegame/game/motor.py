@@ -108,9 +108,23 @@ class Motor:
             sys.exit()
 
     def check_if_snake_is_dead(self):
+        hit_border = self.check_if_snake_hit_border()
+        hit_itself = self.check_if_snake_hit_itself()
+        return hit_border or hit_itself
+
+    def check_if_snake_hit_border(self):
         head_of_the_snake = self.snake.get_segments()[0]
         if head_of_the_snake.position_x < 0 or head_of_the_snake.position_x > (self.map_size - self.cell_size):
             return True
         if head_of_the_snake.position_y < 0 or head_of_the_snake.position_y > (self.map_size - self.cell_size):
             return True
+
+        return False
+
+    def check_if_snake_hit_itself(self):
+        head_of_the_snake = self.snake.get_segments()[0]
+        segments = self.snake.get_segments()[1:]
+        for segment in segments:
+            if head_of_the_snake.position_x == segment.position_x and head_of_the_snake.position_y == segment.position_y:
+                return True
         return False
