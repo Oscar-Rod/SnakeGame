@@ -22,6 +22,7 @@ class Motor:
         self.frames_per_second = frames_per_second
         self.is_training = is_training
         self.snakes = []
+        self.dead_snakes = []
         self.apples = []
         self.number_of_generations = number_of_generations
         self.number_of_snakes = number_of_snakes
@@ -52,12 +53,15 @@ class Motor:
 
                 self.snakes[i].update_position()
                 self.check_if_apple_has_been_eaten(i)
-                snake_is_dead = self.check_if_snake_is_dead(i)
+                self.check_if_snake_is_dead(i)
 
-                if snake_is_dead:
-                    game_over = True
-                    pass
+            self.remove_dead_snakes()
 
+            if len(self.snakes) is 0:
+                game_over = True
+                pass
+
+            for i in range(len(self.snakes)):
                 self.draw_snake(screen, i)
                 self.draw_apple(screen, i)
 
@@ -139,7 +143,8 @@ class Motor:
     def check_if_snake_is_dead(self, snake_number):
         hit_border = self.check_if_snake_hit_border(snake_number)
         hit_itself = self.check_if_snake_hit_itself(snake_number)
-        return hit_border or hit_itself
+        if hit_border or hit_itself:
+            self.snakes[snake_number].alive = False
 
     def check_if_snake_hit_border(self, snake_number):
         head_of_the_snake = self.snakes[snake_number].get_segments()[0]
@@ -179,3 +184,9 @@ class Motor:
     def text_objects(self, text, font):
         text_surface = font.render(text, True, (0, 255, 0))
         return text_surface, text_surface.get_rect()
+
+    def remove_dead_snakes(self):
+        for i in range(len(self.snakes)):
+            if not self.snakes[i].alive:
+                self.dead_snakes.append(self.snakes[i])
+        self.snakes = [x for x in self.snakes if x.alive]
