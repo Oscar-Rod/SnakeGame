@@ -14,9 +14,13 @@ class Snake:
         self.delay_counter = 0
         self.body = Body(length, self.position[0], self.position[1], self.speed_x, self.speed_y, cell_size)
         self.alive = True
+        self.apple = None
 
     def set_direction(self, direction):
         pass
+
+    def set_apple(self, apple):
+        self.apple = apple
 
     def check_is_a_valid_direction(self, direction):
         segments = self.body.get_segments()

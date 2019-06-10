@@ -23,7 +23,7 @@ class Motor:
         self.is_training = is_training
         self.snakes = []
         self.dead_snakes = []
-        self.apples = []
+        # self.apples = []
         self.number_of_generations = number_of_generations
         self.number_of_snakes = number_of_snakes
 
@@ -37,7 +37,6 @@ class Motor:
     def play_generation(self, clock, gen, screen):
         game_over = False
         self.snakes = self.generate_snakes()
-        self.apples = self.generate_apples()
         while not game_over:
             screen.fill(self.background_color)
             self.message_display('Generation {}'.format(gen), 20, 70, 35, screen)
@@ -88,24 +87,29 @@ class Motor:
 
     def draw_apple(self, screen, snake_number):
         pygame.draw.rect(screen, self.apple_color, (
-            self.apples[snake_number].position_x, self.apples[snake_number].position_y, self.cell_size, self.cell_size))
+            self.snakes[snake_number].apple.position_x, self.snakes[snake_number].apple.position_y, self.cell_size,
+            self.cell_size))
 
-    def generate_apples(self):
-        apples = []
-        for i in range(self.number_of_snakes):
-            segments = self.snakes[i].get_segments()
-            positions_blocked_by_snake = [[], []]
-            for segment in segments:
-                positions_blocked_by_snake[0].append(segment.position_x)
-                positions_blocked_by_snake[1].append(segment.position_y)
+    # def generate_apples(self):
+    #     apples = []
+    #     for i in range(self.number_of_snakes):
+    #         position_x, position_y = self.find_position_for_apple(i)
+    #         apples.append(Apple(position_x, position_y))
+    #     return apples
+
+    def find_position_for_apple(self, snake):
+        segments = snake.get_segments()
+        positions_blocked_by_snake = [[], []]
+        for segment in segments:
+            positions_blocked_by_snake[0].append(segment.position_x)
+            positions_blocked_by_snake[1].append(segment.position_y)
+        position_x = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
+        while position_x in positions_blocked_by_snake[0]:
             position_x = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
-            while position_x in positions_blocked_by_snake[0]:
-                position_x = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
+        position_y = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
+        while position_y in positions_blocked_by_snake[1]:
             position_y = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
-            while position_y in positions_blocked_by_snake[1]:
-                position_y = random.randrange(0, self.map_size - self.cell_size, self.cell_size)
-            apples.append(Apple(position_x, position_y))
-        return apples
+        return position_x, position_y
 
     def generate_snakes(self):
         snakes = []
@@ -119,20 +123,21 @@ class Motor:
                                                self.cell_size)]
             if not self.is_training:
                 snake = SnakePlayer(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
-                snakes.append(snake)
             else:
                 snake = SnakeAI(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
-                snakes.append(snake)
+            position_x, position_y = self.find_position_for_apple(snake)
+            snake.set_apple(Apple(position_x, position_y))
+            snakes.append(snake)
         return snakes
 
     def check_if_apple_has_been_eaten(self, snake_number):
         segments = self.snakes[snake_number].get_segments()
         head_of_snake = segments[0]
-        if head_of_snake.position_x == self.apples[snake_number].position_x and \
-                head_of_snake.position_y == self.apples[snake_number].position_y:
-            self.apples.eaten = True
-            # TODO ATTACH EACH APPLE TO EACH SNAKE
-            self.apples = self.generate_apples()
+        if head_of_snake.position_x == self.snakes[snake_number].apple.position_x and \
+                head_of_snake.position_y == self.snakes[snake_number].apple.position_y:
+            self.snakes[snake_number].apple.eaten = True
+            position_x, position_y = self.find_position_for_apple(self.snakes[snake_number])
+            self.snakes[snake_number].set_apple(Apple(position_x, position_y))
             self.snakes[snake_number].add_a_segment()
 
     @staticmethod
@@ -171,8 +176,10 @@ class Motor:
         state_of_the_game = [0] * int((600 / 15)) * int((600 / 15))
         for segment in self.snakes[snake_number].get_segments():
             state_of_the_game[int(segment.position_x / 15) + int(segment.position_y / 15) * 40] = 1
+
         state_of_the_game[
-            int(self.apples[snake_number].position_x / 15) + int(self.apples[snake_number].position_y / 15) * 40] = 2
+            int(self.snakes[snake_number].apple.position_x / 15) + int(
+                self.snakes[snake_number].apple.position_y / 15) * 40] = 2
         return state_of_the_game
 
     def message_display(self, text, size, posx, posy, window):
