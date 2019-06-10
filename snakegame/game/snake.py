@@ -16,11 +16,7 @@ class Snake:
         self.alive = True
 
     def set_direction(self, direction):
-
-        is_valid = self.check_is_a_valid_direction(direction)
-        if is_valid:
-            self.direction = direction
-            self.set_speeds(direction)
+        pass
 
     def check_is_a_valid_direction(self, direction):
         segments = self.body.get_segments()

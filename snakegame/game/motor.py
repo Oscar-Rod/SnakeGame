@@ -4,12 +4,13 @@ import sys
 import pygame
 
 from snakegame.game.apple import Apple
-from snakegame.game.snake import Snake
+from snakegame.game.snakeAI import SnakeAI
+from snakegame.game.snakeplayer import SnakePlayer
 
 
 class Motor:
     def __init__(self, snake_speed, map_size=600, snake_color=(255, 255, 255), background_color=(0, 0, 0),
-                 cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5):
+                 cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5, is_training=False):
         self.map_size = map_size
         self.snake_speed = snake_speed
         self.snake_initial_size = snake_initial_size
@@ -18,6 +19,7 @@ class Motor:
         self.background_color = background_color
         self.cell_size = cell_size
         self.frames_per_second = frames_per_second
+        self.is_training = is_training
         self.snake = self.generate_snake()
         self.apple = self.generate_apple()
 
@@ -31,7 +33,11 @@ class Motor:
             for event in pygame.event.get():
                 self.check_for_exit(event)
 
-                self.update_direction(event)
+                if not self.is_training:
+                    self.update_direction(event)
+
+            if self.is_training:
+                self.snake.set_direction(self.get_state_of_the_game())
 
             screen.fill(self.background_color)
 
@@ -88,11 +94,17 @@ class Motor:
     def generate_snake(self):
         snake_direction = random.choice(["left", "right", "up", "down"])
         snake_position = [random.randrange((self.snake_initial_size - 1) * self.cell_size,
-                                           self.map_size - self.snake_initial_size * self.cell_size, self.cell_size),
+                                           self.map_size - self.snake_initial_size * self.cell_size,
+                                           self.cell_size),
                           random.randrange((self.snake_initial_size - 1) * self.cell_size,
-                                           self.map_size - self.snake_initial_size * self.cell_size, self.cell_size)]
-        snake = Snake(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
-        return snake
+                                           self.map_size - self.snake_initial_size * self.cell_size,
+                                           self.cell_size)]
+        if not self.is_training:
+            snake = SnakePlayer(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
+            return snake
+        else:
+            snake = SnakeAI(snake_position, snake_direction, cell_size=self.cell_size, speed=self.snake_speed)
+            return snake
 
     def check_if_apple_has_been_eaten(self):
         segments = self.snake.get_segments()
@@ -128,3 +140,14 @@ class Motor:
             if head_of_the_snake.position_x == segment.position_x and head_of_the_snake.position_y == segment.position_y:
                 return True
         return False
+
+    def get_state_of_the_game(self):
+        # Snake = 1
+        # Apple = 2
+        # Nothing = 0
+
+        state_of_the_game = [0] * int((600 / 15)) * int((600 / 15))
+        for segment in self.snake.get_segments():
+            state_of_the_game[int(segment.position_x / 15) + int(segment.position_y / 15) * 40] = 1
+        state_of_the_game[int(self.apple.position_x / 15) + int(self.apple.position_y / 15) * 40] = 2
+        return state_of_the_game
