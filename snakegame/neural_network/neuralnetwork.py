@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 
 class NeuralNetwork(object):
@@ -31,7 +32,12 @@ class NeuralNetwork(object):
         output_v = self.sigmoid(mat_o)
 
         # linear transformation
-        [m, b] = self.linear_trans(input_space, output_space)
-        output_linear = m * output_v + b
+        # [m, b] = self.linear_trans(input_space, output_space)
+        # output_linear = m * output_v + b
 
-        return output_linear
+        return output_v
+
+    def save_to_file(self, filename):
+        weights = [self.weights_ih, self.weights_ho, self.bias_ih, self.weights_ho]
+        with open(filename + ".pkl", "wb") as output:
+            pickle.dump(weights, output, pickle.HIGHEST_PROTOCOL)

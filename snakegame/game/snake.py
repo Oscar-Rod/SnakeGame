@@ -52,7 +52,7 @@ class Snake:
             self.speed_y = 1
 
     def update_position(self):
-        if self.delay_counter == 101 - self.speed:
+        if self.delay_counter == 100 - self.speed:
             segments = self.body.get_segments()
             last_segment = segments.pop(-1)
             last_segment.position_x = segments[0].position_x + self.speed_x * self.cell_size
