@@ -1,11 +1,22 @@
 from snakegame.game.snake import Snake
-from snakegame.neural_network.neuralnetwork import NeuralNetwork
+from snakegame.neural_network.my_neuralnetwork import NeuralNetwork
 
 
 class SnakeAI(Snake):
-    def __init__(self, position, direction, cell_size=15, length=5, speed=1):
+    def __init__(self, position, direction, number_of_cells, cell_size=15, length=5, speed=1):
         super().__init__(position, direction, cell_size, length, speed)
-        self.brain = NeuralNetwork(40 * 40, 20, 4)
+        self.brain = NeuralNetwork(self.set_architecture(number_of_cells))
+
+    def set_architecture(self, number_of_cells):
+        nn_architecture = [
+            {"input_dim": int(number_of_cells ** 2), "output_dim": int(number_of_cells), "activation": "relu"},
+            {"input_dim": int(number_of_cells), "output_dim": int(number_of_cells), "activation": "relu"},
+            {"input_dim": int(number_of_cells), "output_dim": int(number_of_cells), "activation": "relu"},
+            {"input_dim": int(number_of_cells), "output_dim": int(number_of_cells), "activation": "relu"},
+            {"input_dim": int(number_of_cells), "output_dim": int(number_of_cells / 2), "activation": "relu"},
+            {"input_dim": int(number_of_cells / 2), "output_dim": 4, "activation": "relu"},
+        ]
+        return nn_architecture
 
     def set_direction(self, state_of_the_game):
         x = self.brain.predict(state_of_the_game)
