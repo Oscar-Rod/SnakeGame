@@ -38,3 +38,9 @@ class Painter:
         self.clock.tick(self.frames_per_second)
 
         self.pygame.display.update()
+
+    def message_display(self, text, size, posx, posy, window):
+        large_text = self.pygame.font.Font('freesansbold.ttf', size)
+        text_surf, text_rect = self.text_objects(text, large_text)
+        text_rect.center = (posx, posy)
+        window.blit(text_surf, text_rect)
