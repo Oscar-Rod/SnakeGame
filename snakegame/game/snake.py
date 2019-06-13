@@ -2,8 +2,7 @@ import copy
 
 
 class Snake:
-    def __init__(self, position, direction, cell_size=15, length=5, speed=1):
-        self.cell_size = cell_size
+    def __init__(self, position, direction, length=5, speed=1):
         self.length = length
         self.speed = speed
         self.direction = direction
@@ -12,7 +11,7 @@ class Snake:
         self.set_speeds(direction)
         self.position = position
         self.delay_counter = 0
-        self.body = Body(length, self.position[0], self.position[1], self.speed_x, self.speed_y, cell_size)
+        self.body = Body(length, self.position[0], self.position[1], self.speed_x, self.speed_y)
         self.alive = True
         self.apple = None
         self.time_since_last_apple = 0
@@ -62,8 +61,8 @@ class Snake:
             self.time_since_last_apple += 1
             segments = self.body.get_segments()
             last_segment = segments.pop(-1)
-            last_segment.position_x = segments[0].position_x + self.speed_x * self.cell_size
-            last_segment.position_y = segments[0].position_y + self.speed_y * self.cell_size
+            last_segment.position_x = segments[0].position_x + self.speed_x
+            last_segment.position_y = segments[0].position_y + self.speed_y
             segments.insert(0, last_segment)
             self.delay_counter = 0
             self.update_score()
@@ -86,37 +85,34 @@ class Snake:
         if abs(self.apple.position_x - new_head.position_x) < abs(self.apple.position_x - previous_head.position_x):
             self.score += 1
         elif abs(self.apple.position_x - new_head.position_x) > abs(self.apple.position_x - previous_head.position_x):
-            self.score -= 1.5
+            self.score -= 0.5
 
         if abs(self.apple.position_y - new_head.position_y) < abs(self.apple.position_y - previous_head.position_y):
             self.score += 1
         elif abs(self.apple.position_y - new_head.position_y) > abs(self.apple.position_y - previous_head.position_y):
-            self.score -= 1.5
+            self.score -= 0.5
 
 
 class Segment:
-    def __init__(self, position_x, position_y, size):
+    def __init__(self, position_x, position_y):
         self.position_x = position_x
         self.position_y = position_y
-        self.size = size
-
 
 class Body:
-    def __init__(self, length, head_x, head_y, speed_x, speed_y, square_size):
+    def __init__(self, length, head_x, head_y, speed_x, speed_y):
         self.length = length
         self.speed_y = speed_y
         self.speed_x = speed_x
         self.head_x = head_x
         self.head_y = head_y
-        self.size = square_size
         self.list_of_segments = self.generate_segments()
 
     def generate_segments(self):
         list_of_segments = []
         for i in range(self.length):
-            pos_x = self.head_x - i * self.speed_x * self.size
-            pos_y = self.head_y - i * self.speed_y * self.size
-            list_of_segments.append(Segment(pos_x, pos_y, self.size))
+            pos_x = self.head_x - i * self.speed_x
+            pos_y = self.head_y - i * self.speed_y
+            list_of_segments.append(Segment(pos_x, pos_y))
         return list_of_segments
 
     def get_segments(self):
