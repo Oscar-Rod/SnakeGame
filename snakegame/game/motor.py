@@ -5,15 +5,15 @@ import sys
 import pygame
 
 from snakegame.game.apple import Apple
+from snakegame.game.painter import Painter
 from snakegame.game.snakeAI import SnakeAI
 from snakegame.game.snakeplayer import SnakePlayer
 
 
 class Motor:
-    def __init__(self, snake_speed, screen, snake_color=(255, 255, 255), background_color=(0, 0, 0), number_of_cells=40,
-                 cell_size=15,
-                 frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5, is_training=False,
-                 number_of_generations=10, number_of_snakes=10, mutation_rate=0.1):
+    def __init__(self, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
+                 number_of_cells=40, cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5,
+                 human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1):
         self.map_size = int(cell_size * number_of_cells)
         self.number_of_cells = number_of_cells
         self.snake_speed = snake_speed
@@ -23,83 +23,80 @@ class Motor:
         self.background_color = background_color
         self.cell_size = cell_size
         self.frames_per_second = frames_per_second
-        self.is_training = is_training
+        self.human_player = human_player
         self.snakes = []
         self.dead_snakes = []
         self.number_of_generations = number_of_generations
         self.number_of_snakes = number_of_snakes
         self.mutation_rate = mutation_rate
-        self.screen = screen
+        self.show_screen = show_screen
+        if human_player or show_screen:
+            self.painter = Painter(pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
+                                   frames_per_second)
 
     def play_game(self):
-        clock = None
-        screen = None
-        if self.screen:
-            pygame.init()
-            screen = pygame.display.set_mode((self.map_size, self.map_size))
-            clock = pygame.time.Clock()
-        self.snakes = self.generate_snakes()
 
-        for i in range(self.number_of_generations):
-            self.play_generation(i + 1, clock, screen)
-            self.mutate_snakes()
+        if not self.human_player:
+            self.snakes = self.generate_snakes(self.number_of_snakes)
 
-    def play_generation(self, gen, clock=None, screen=None):
+            for i in range(self.number_of_generations):
+                self.play_generation(i + 1)
+                self.mutate_snakes()
+
+        else:
+            snake = self.generate_snakes(1)
+            self.play_snake(snake)
+
+    def play_snake(self, snake):
+        game_over = False
+        while not game_over:
+
+            self.painter.paint([snake])
+
+            for event in pygame.event.get():
+                self.check_for_exit(event)
+                self.update_direction(event, snake)
+
+            snake.update_position()
+            self.check_if_apple_has_been_eaten(snake)
+            self.check_if_snake_is_dead(snake)
+
+            if not snake.alive:
+                game_over = True
+                pass
+
+    @staticmethod
+    def update_direction(event, snake):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                snake.set_direction("left")
+            elif event.key == pygame.K_RIGHT:
+                snake.set_direction("right")
+            elif event.key == pygame.K_UP:
+                snake.set_direction("up")
+            elif event.key == pygame.K_DOWN:
+                snake.set_direction("down")
+
+    def play_generation(self, gen):
         print("GENERATION: " + str(gen))
         game_over = False
         self.dead_snakes = []
         while not game_over:
-            if self.screen:
-                screen.fill(self.background_color)
-                self.message_display('Generation {}'.format(gen), 20, 70, 35, screen)
+            if self.show_screen:
 
                 for event in pygame.event.get():
                     self.check_for_exit(event)
 
-                # if not self.is_training:
-                #     self.update_direction(event)
+                self.painter.paint(self.snakes)
 
-            for i in range(len(self.snakes)):
-                self.play_one_turn_for_snake(i)
+            for snake in self.snakes:
+                self.play_one_turn_for_snake(snake)
 
             self.remove_dead_snakes()
 
             if len(self.snakes) is 0:
                 game_over = True
                 pass
-
-            if self.screen:
-                for i in range(len(self.snakes)):
-                    self.draw_snake(screen, i)
-                    self.draw_apple(screen, i)
-
-                clock.tick(self.frames_per_second)
-
-                pygame.display.update()
-
-    def update_direction(self, event):
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                self.snakes.set_direction("left")
-            elif event.key == pygame.K_RIGHT:
-                self.snakes.set_direction("right")
-            elif event.key == pygame.K_UP:
-                self.snakes.set_direction("up")
-            elif event.key == pygame.K_DOWN:
-                self.snakes.set_direction("down")
-
-    def draw_snake(self, screen, snake_number):
-        segments = self.snakes[snake_number].get_segments()
-        for segment in segments:
-            pygame.draw.rect(screen, self.snake_color, (
-                segment.position_x * self.cell_size, segment.position_y * self.cell_size, self.cell_size,
-                self.cell_size))
-
-    def draw_apple(self, screen, snake_number):
-        pygame.draw.rect(screen, self.apple_color, (
-            self.snakes[snake_number].apple.position_x * self.cell_size,
-            self.snakes[snake_number].apple.position_y * self.cell_size, self.cell_size,
-            self.cell_size))
 
     def find_position_for_apple(self, snake):
         segments = snake.get_segments()
@@ -115,14 +112,14 @@ class Motor:
             position_y = random.randrange(0, self.number_of_cells)
         return position_x, position_y
 
-    def generate_snakes(self):
+    def generate_snakes(self, number_of_snakes):
         snakes = []
-        for i in range(self.number_of_snakes):
+        for i in range(number_of_snakes):
             snake_direction = random.choice(["left", "right", "up", "down"])
             snake_position = [
                 random.randrange((self.snake_initial_size - 1), self.number_of_cells - self.snake_initial_size),
                 random.randrange((self.snake_initial_size - 1), self.number_of_cells - self.snake_initial_size)]
-            if not self.is_training:
+            if self.human_player:
                 snake = SnakePlayer(snake_position, snake_direction, speed=self.snake_speed,
                                     length=self.snake_initial_size)
             else:
@@ -131,31 +128,34 @@ class Motor:
             position_x, position_y = self.find_position_for_apple(snake)
             snake.set_apple(Apple(position_x, position_y))
             snakes.append(snake)
-        return snakes
+        if len(snakes) == 1:
+            return snakes[0]
+        else:
+            return snakes
 
-    def check_if_apple_has_been_eaten(self, snake_number):
-        segments = self.snakes[snake_number].get_segments()
+    def check_if_apple_has_been_eaten(self, snake):
+        segments = snake.get_segments()
         head_of_snake = segments[0]
-        if head_of_snake.position_x == self.snakes[snake_number].apple.position_x and \
-                head_of_snake.position_y == self.snakes[snake_number].apple.position_y:
-            self.snakes[snake_number].apple.eaten = True
-            position_x, position_y = self.find_position_for_apple(self.snakes[snake_number])
-            self.snakes[snake_number].set_apple(Apple(position_x, position_y))
-            self.snakes[snake_number].add_a_segment()
+        if head_of_snake.position_x == snake.apple.position_x and \
+                head_of_snake.position_y == snake.apple.position_y:
+            snake.apple.eaten = True
+            position_x, position_y = self.find_position_for_apple(snake)
+            snake.set_apple(Apple(position_x, position_y))
+            snake.add_a_segment()
 
     @staticmethod
     def check_for_exit(event):
         if event.type == pygame.QUIT:
             sys.exit()
 
-    def check_if_snake_is_dead(self, snake_number):
-        hit_border = self.check_if_snake_hit_border(snake_number)
-        hit_itself = self.check_if_snake_hit_itself(snake_number)
-        if hit_border or hit_itself or self.snakes[snake_number].time_since_last_apple > self.number_of_cells ** 2:
-            self.snakes[snake_number].alive = False
+    def check_if_snake_is_dead(self, snake):
+        hit_border = self.check_if_snake_hit_border(snake)
+        hit_itself = self.check_if_snake_hit_itself(snake)
+        if hit_border or hit_itself or snake.time_since_last_apple > self.number_of_cells ** 2:
+            snake.alive = False
 
-    def check_if_snake_hit_border(self, snake_number):
-        head_of_the_snake = self.snakes[snake_number].get_segments()[0]
+    def check_if_snake_hit_border(self, snake):
+        head_of_the_snake = snake.get_segments()[0]
         if head_of_the_snake.position_x < 0 or head_of_the_snake.position_x >= self.number_of_cells:
             return True
         if head_of_the_snake.position_y < 0 or head_of_the_snake.position_y >= self.number_of_cells:
@@ -163,19 +163,19 @@ class Motor:
 
         return False
 
-    def check_if_snake_hit_itself(self, snake_number):
-        head_of_the_snake = self.snakes[snake_number].get_segments()[0]
-        segments = self.snakes[snake_number].get_segments()[1:]
+    def check_if_snake_hit_itself(self, snake):
+        head_of_the_snake = snake.get_segments()[0]
+        segments = snake.get_segments()[1:]
         for segment in segments:
             if head_of_the_snake.position_x == segment.position_x and head_of_the_snake.position_y == segment.position_y:
                 return True
         return False
 
-    def get_state_of_the_board(self, snake_number):
+    def get_state_of_the_board(self, snake):
         state_of_the_game = [-1] * self.number_of_cells * self.number_of_cells
 
-        apple_cell_x = int(self.snakes[snake_number].apple.position_x / self.cell_size)
-        apple_cell_y = int(self.snakes[snake_number].apple.position_y / self.cell_size)
+        apple_cell_x = int(snake.apple.position_x / self.cell_size)
+        apple_cell_y = int(snake.apple.position_y / self.cell_size)
         state_of_the_game[apple_cell_x + apple_cell_y * self.number_of_cells] = -10
 
         for i in range(-1, 2):
@@ -186,8 +186,8 @@ class Motor:
 
                 state_of_the_game[apple_cell_x + i + (apple_cell_y + j) * self.number_of_cells] = -5
 
-        for i in range(len(self.snakes[snake_number].get_segments())):
-            segments = self.snakes[snake_number].get_segments()
+        for i in range(len(snake.get_segments())):
+            segments = snake.get_segments()
             if i is 0:
                 index = int(segments[i].position_x / self.cell_size) + int(
                     segments[i].position_y / self.cell_size) * self.number_of_cells
@@ -197,10 +197,9 @@ class Motor:
                     segments[i].position_y / self.cell_size) * self.number_of_cells] = 2
         return state_of_the_game
 
-    def get_snake_perceptions(self, snake_number):
+    def get_snake_perceptions(self, snake):
         # perception left, up, right, down. First apple, then body
         perception = [0] * 4
-        snake = self.snakes[snake_number]
         head = snake.get_segments()[0]
         head_x = head.position_x
         head_y = head.position_y
@@ -223,10 +222,9 @@ class Motor:
                 perception[2] = abs(distance_in_x)
         return perception
 
-    def get_snake_perceptions_2(self, snake_number):
+    def get_snake_perceptions_2(self, snake):
         # left, ahead, right, apple, obstacle
         perception = [0] * 7
-        snake = self.snakes[snake_number]
         head = snake.get_segments()[0]
         head_x = head.position_x
         head_y = head.position_y
@@ -330,7 +328,7 @@ class Motor:
         self.snakes = [x for x in self.snakes if x.alive]
 
     def mutate_snakes(self):
-        self.snakes = self.generate_snakes()
+        self.snakes = self.generate_snakes(self.number_of_snakes)
         self.order_dead_snakes_by_performance()
         number_of_snakes = len(self.dead_snakes)
         number_of_snakes_unchanged = int(number_of_snakes * 0.001)
@@ -354,8 +352,8 @@ class Motor:
     def order_dead_snakes_by_performance(self):
         self.dead_snakes.sort(key=lambda x: x.score, reverse=True)
 
-    def play_one_turn_for_snake(self, snake_number):
-        self.snakes[snake_number].set_direction(self.get_snake_perceptions_2(snake_number))
-        self.snakes[snake_number].update_position()
-        self.check_if_apple_has_been_eaten(snake_number)
-        self.check_if_snake_is_dead(snake_number)
+    def play_one_turn_for_snake(self, snake):
+        snake.set_direction(self.get_snake_perceptions_2(snake))
+        snake.update_position()
+        self.check_if_apple_has_been_eaten(snake)
+        self.check_if_snake_is_dead(snake)
