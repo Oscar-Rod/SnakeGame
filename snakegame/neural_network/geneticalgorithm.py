@@ -33,7 +33,8 @@ class Breeder:
     def order_dead_snakes_by_performance(dead_snakes):
         dead_snakes.sort(key=lambda x: x.score, reverse=True)
 
-    def generate_string_with_best_snakes(self, snakes, number):
+    @staticmethod
+    def generate_string_with_best_snakes(snakes, number):
         list_of_scores = [x.score for x in snakes]
         list_of_length = [x.length for x in snakes]
         return ", ".join(map(str, list_of_scores)), ", ".join(map(str, list_of_length))

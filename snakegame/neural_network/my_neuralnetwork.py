@@ -1,3 +1,4 @@
+import pickle
 import random
 
 import numpy as np
@@ -11,7 +12,6 @@ class NeuralNetwork(object):
 
     def init_layers(self, nn_architecture, seed=99):
         np.random.seed(seed)
-        number_of_layers = len(nn_architecture)
         params_values = {}
 
         for idx, layer in enumerate(nn_architecture):
@@ -37,9 +37,9 @@ class NeuralNetwork(object):
 
         Z_curr = Z_curr + b_curr.ravel()
 
-        if activation is "relu":
+        if activation == "relu":
             activation_func = self.relu
-        elif activation is "sigmoid":
+        elif activation == "sigmoid":
             activation_func = self.sigmoid
         else:
             raise Exception('Non-supported activation function')
@@ -83,3 +83,14 @@ class NeuralNetwork(object):
 
             if bool(random.getrandbits(1)):
                 self.params_values["b" + str(layer_idx)] = b2
+
+    def save_to_file(self, filename):
+        neural_network = [self.nn_architecture, self.params_values]
+        with open(filename + ".pkl", "wb") as output:
+            pickle.dump(neural_network, output, pickle.HIGHEST_PROTOCOL)
+
+    def load_from_file(self, filename):
+        with open(filename + ".pkl", "rb") as file:
+            neural_network = pickle.load(file)
+            self.nn_architecture = neural_network[0]
+            self.params_values = neural_network[1]

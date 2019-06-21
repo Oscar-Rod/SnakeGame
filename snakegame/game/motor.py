@@ -1,3 +1,4 @@
+import datetime
 import random
 import sys
 
@@ -13,7 +14,8 @@ from snakegame.neural_network.geneticalgorithm import Breeder
 class Motor:
     def __init__(self, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
                  number_of_cells=40, cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5,
-                 human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1):
+                 human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1,
+                 number_of_snakes_to_save=10, batch_name=None, training=False):
         self.number_of_cells = number_of_cells
         self.snake_speed = snake_speed
         self.snake_initial_size = snake_initial_size
@@ -24,6 +26,9 @@ class Motor:
         self.number_of_snakes = number_of_snakes
         self.show_screen = show_screen
         self.breeder = Breeder(mutation_rate)
+        self.number_of_snakes_to_save = number_of_snakes_to_save
+        self.batch_name = batch_name
+        self.training = training
         if human_player or show_screen:
             self.painter = Painter(pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
                                    frames_per_second)
@@ -31,12 +36,19 @@ class Motor:
     def play_game(self):
 
         if not self.human_player:
-            self.snakes = self.generate_snakes(self.number_of_snakes)
+            if self.training:
+                self.snakes = self.generate_snakes(self.number_of_snakes)
 
-            for i in range(self.number_of_generations):
-                self.play_generation(i + 1)
-                new_snakes = self.generate_snakes(self.number_of_snakes)
-                self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
+                for i in range(self.number_of_generations):
+                    self.play_generation(i + 1)
+                    new_snakes = self.generate_snakes(self.number_of_snakes)
+                    self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
+
+                self.save_best_snakes()
+            else:
+                snake = self.generate_snakes(1)
+                snake.brain.load_from_file("2019_06_18_20_53_snake_1")
+                self.play_snake(snake)
 
         else:
             snake = self.generate_snakes(1)
@@ -44,21 +56,37 @@ class Motor:
 
     def play_snake(self, snake):
         game_over = False
-        while not game_over:
 
-            self.painter.paint([snake])
+        if not self.human_player:
+            while not game_over:
 
-            for event in pygame.event.get():
-                self.check_for_exit(event)
-                self.update_direction(event, snake)
+                self.painter.paint([snake])
 
-            snake.update_position()
-            self.check_if_apple_has_been_eaten(snake)
-            self.check_if_snake_is_dead(snake)
+                for event in pygame.event.get():
+                    self.check_for_exit(event)
 
-            if not snake.alive:
-                game_over = True
-                pass
+                self.play_one_turn_for_snake(snake)
+
+                if not snake.alive:
+                    game_over = True
+                    pass
+
+        else:
+            while not game_over:
+
+                self.painter.paint([snake])
+
+                for event in pygame.event.get():
+                    self.check_for_exit(event)
+                    self.update_direction(event, snake)
+
+                snake.update_position()
+                self.check_if_apple_has_been_eaten(snake)
+                self.check_if_snake_is_dead(snake)
+
+                if not snake.alive:
+                    game_over = True
+                    pass
 
     @staticmethod
     def update_direction(event, snake):
@@ -318,3 +346,10 @@ class Motor:
         snake.update_position()
         self.check_if_apple_has_been_eaten(snake)
         self.check_if_snake_is_dead(snake)
+
+    def save_best_snakes(self):
+        if self.batch_name is None:
+            now = datetime.datetime.now()
+            self.batch_name = now.strftime("%Y_%m_%d_%H_%M")
+        for i in range(self.number_of_snakes_to_save):
+            self.snakes[i].brain.save_to_file(self.batch_name + "_snake_" + str(i))
