@@ -1,4 +1,3 @@
-import pickle
 import random
 
 import numpy as np
@@ -83,14 +82,3 @@ class NeuralNetwork(object):
 
             if bool(random.getrandbits(1)):
                 self.params_values["b" + str(layer_idx)] = b2
-
-    def save_to_file(self, filename):
-        neural_network = [self.nn_architecture, self.params_values]
-        with open(filename + ".pkl", "wb") as output:
-            pickle.dump(neural_network, output, pickle.HIGHEST_PROTOCOL)
-
-    def load_from_file(self, filename):
-        with open(filename + ".pkl", "rb") as file:
-            neural_network = pickle.load(file)
-            self.nn_architecture = neural_network[0]
-            self.params_values = neural_network[1]
