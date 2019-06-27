@@ -1,9 +1,8 @@
-import datetime
 import os
 import pickle
 import sys
+from pathlib import Path
 
-import math
 import pygame
 
 from snakegame.game.board import Board
@@ -142,7 +141,11 @@ class Motor:
         self.board.check_if_snake_is_dead(snake)
 
     def save_best_snakes(self):
-        folder = "../brains/" + self.perception
+        parent_folder = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        print(parent_folder)
+        if parent_folder.split("/")[-1] != "snakegame" or parent_folder.split("/")[-2] != "snakegame":
+            raise Exception("Trying to save brain to a wrong folder")
+        folder = parent_folder + "/brains/" + self.perception
         if not os.path.exists(folder):
             os.makedirs(folder)
 

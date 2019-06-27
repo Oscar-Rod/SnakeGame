@@ -9,8 +9,8 @@ class Breeder:
     def mutate_snakes(self, new_snakes, dead_snakes):
         self.order_dead_snakes_by_performance(dead_snakes)
         number_of_snakes = len(dead_snakes)
-        number_of_snakes_unchanged = int(number_of_snakes * 0.001)
-        number_of_snakes_breded = int(number_of_snakes * 0.015)
+        number_of_snakes_unchanged = max(int(number_of_snakes * 0.001), 1)
+        number_of_snakes_breded = max(int(number_of_snakes * 0.015), 2)
         for i in range(int(number_of_snakes * 0.90)):
             if i is 0:
                 scores, lengths = self.generate_string_with_best_snakes(dead_snakes, number_of_snakes_breded)
