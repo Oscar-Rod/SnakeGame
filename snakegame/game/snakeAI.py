@@ -3,9 +3,9 @@ from snakegame.game.snake import Snake
 
 
 class SnakeAI(Snake):
-    def __init__(self, position, direction, number_of_cells, length=5, speed=1):
+    def __init__(self, position, direction, perception, number_of_cells, length=5, speed=1):
         super().__init__(position, direction, length, speed)
-        self.brain = Brain(number_of_cells, None)
+        self.brain = Brain(perception, number_of_cells)
 
     def set_direction(self, number_of_cells):
         x = self.brain.predict(self, number_of_cells)

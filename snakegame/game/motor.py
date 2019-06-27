@@ -1,7 +1,9 @@
 import datetime
+import os
 import pickle
 import sys
 
+import math
 import pygame
 
 from snakegame.game.board import Board
@@ -13,7 +15,7 @@ class Motor:
     def __init__(self, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
                  number_of_cells=40, cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5,
                  human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1,
-                 number_of_snakes_to_save=10, batch_name=None, training=False):
+                 number_of_snakes_to_save=10, perception=None, training=False):
         self.snake_speed = snake_speed
         self.snake_initial_size = snake_initial_size
         self.human_player = human_player
@@ -24,7 +26,7 @@ class Motor:
         self.show_screen = show_screen
         self.breeder = Breeder(mutation_rate)
         self.number_of_snakes_to_save = number_of_snakes_to_save
-        self.batch_name = batch_name
+        self.perception = perception
         self.training = training
         self.board = Board(number_of_cells)
         if human_player or show_screen:
@@ -36,18 +38,19 @@ class Motor:
         if not self.human_player:
             if self.training:
                 self.snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
-                                                         self.snake_speed, self.human_player)
+                                                         self.snake_speed, self.perception, self.human_player)
 
                 for i in range(self.number_of_generations):
                     self.play_generation(i + 1)
                     new_snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
-                                                            self.snake_speed, self.human_player)
+                                                            self.snake_speed, self.perception, self.human_player)
                     self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
 
                 self.save_best_snakes()
             else:
-                snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, self.human_player)
-                snake.brain.load_from_file(snake, "2019_06_18_20_53_snake_1")
+                snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None,
+                                                   self.human_player)
+                self.load_from_file(snake, self.perception)
                 self.play_snake(snake)
 
         else:
@@ -139,20 +142,51 @@ class Motor:
         self.board.check_if_snake_is_dead(snake)
 
     def save_best_snakes(self):
-        if self.batch_name is None:
-            now = datetime.datetime.now()
-            self.batch_name = now.strftime("%Y_%m_%d_%H_%M")
+        folder = "../brains/" + self.perception
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+
+        files = os.listdir(folder)
+
         for i in range(self.number_of_snakes_to_save):
-            brain = self.snakes[i].brain
-            self.save_to_file(brain, self.batch_name + "_snake_" + str(i))
+            brain = self.dead_snakes[i].brain
+            filename = "length_" + str(self.dead_snakes[i].length) + "_score_" + str(self.dead_snakes[i].score)
+            self.save_to_file(brain, folder, filename)
+
+        number_of_snakes_to_keep = max(len(files), self.number_of_snakes_to_save)
+
+        self.remove_worst_snakes(folder, number_of_snakes_to_keep)
 
     @staticmethod
-    def save_to_file(brain, filename):
-        with open(filename + ".pkl", "wb") as output:
+    def save_to_file(brain, folder, filename):
+        with open(folder + "/" + filename + ".pkl", "wb") as output:
             pickle.dump(brain, output, pickle.HIGHEST_PROTOCOL)
 
+    def remove_worst_snakes(self, folder, number_of_snakes_to_keep):
+        files = os.listdir(folder)
+        number_of_snakes_to_remove = len(files) - number_of_snakes_to_keep
+        if number_of_snakes_to_remove <= 0:
+            return
+
+        files_with_score = []
+
+        for file in files:
+            split_name = file.split("_")
+            length = split_name[1]
+            score = split_name[3]
+            files_with_score.append((file, length, score))
+
+        files_with_score.sort(key=lambda tup: (tup[1], tup[2]), reverse=True)
+
+        files_to_remove = files_with_score[-number_of_snakes_to_remove:]
+
+        for file in files_to_remove:
+            os.remove(folder + "/" + file[0])
+
     @staticmethod
-    def load_from_file(snake, filename):
-        with open(filename + ".pkl", "rb") as file:
+    def load_from_file(snake, folder):
+        folder = "../brains/" + folder
+        files = os.listdir(folder)
+        with open(folder + "/" + files[0], "rb") as file:
             brain = pickle.load(file)
             snake.brain = brain

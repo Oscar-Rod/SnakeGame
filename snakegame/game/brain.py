@@ -1,4 +1,4 @@
-from snakegame.neural_network.my_neuralnetwork import NeuralNetwork
+from snakegame.neural_network.neuralnetwork import NeuralNetwork
 
 
 class Brain:
@@ -20,7 +20,8 @@ class Brain:
         return nn_architecture
 
     def predict(self, snake, number_of_cells):
-        X = self.get_snake_perceptions(snake, number_of_cells)
+        perception = getattr(self, self.perception)
+        X = perception(snake, number_of_cells)
         return self.neural_network.predict(X)
 
     def mutate(self, mutation_rate):
@@ -55,7 +56,7 @@ class Brain:
                     segments[i].position_y) * self.number_of_cells] = 2
         return state_of_the_game
 
-    def get_snake_perceptions(self, snake, number_of_cells):
+    def snake_vision(self, snake, number_of_cells):
         # left, ahead, right, apple, obstacle
         perception = [0] * 7
         head = snake.get_segments()[0]

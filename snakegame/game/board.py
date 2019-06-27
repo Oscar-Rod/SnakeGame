@@ -19,7 +19,7 @@ class Board:
             apple_position = (random.randrange(0, self.number_of_cells), random.randrange(0, self.number_of_cells))
         return apple_position[0], apple_position[1]
 
-    def generate_snakes(self, number_of_snakes, snake_initial_size, snake_speed, human_player):
+    def generate_snakes(self, number_of_snakes, snake_initial_size, snake_speed, perception, human_player):
         snakes = []
         for i in range(number_of_snakes):
             snake_direction = random.choice(["left", "right", "up", "down"])
@@ -30,7 +30,7 @@ class Board:
                 snake = SnakePlayer(snake_position, snake_direction, speed=snake_speed,
                                     length=snake_initial_size)
             else:
-                snake = SnakeAI(snake_position, snake_direction, self.number_of_cells,
+                snake = SnakeAI(snake_position, snake_direction, perception, self.number_of_cells,
                                 speed=snake_speed, length=snake_initial_size)
             position_x, position_y = self.find_position_for_apple(snake)
             snake.set_apple(Apple(position_x, position_y))
