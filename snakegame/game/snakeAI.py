@@ -7,8 +7,8 @@ class SnakeAI(Snake):
         super().__init__(position, direction, length, speed)
         self.brain = Brain(perception, number_of_cells)
 
-    def set_direction(self, number_of_cells):
-        x = self.brain.predict(self, number_of_cells)
+    def set_direction(self):
+        x = self.brain.predict(self)
         max = -float("inf")
         value = -1
         for i in range(4):

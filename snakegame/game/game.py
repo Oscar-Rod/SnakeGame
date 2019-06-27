@@ -5,14 +5,17 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 square_size = 15
 
+snake_vision = "snakevision"
+board_state = "boardstate"
+
 show_screen = False
 human_player = False
 training = True
-perception = "snake_vision"
+perception = board_state
 
 number_of_snakes_to_save = 10
-number_of_generations = 500
-number_of_snakes = 2000
+number_of_generations = 100
+number_of_snakes = 300
 mutation_rate = 0.3
 
 game_motor = Motor(100, show_screen=show_screen, human_player=human_player, training=training,

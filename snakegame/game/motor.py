@@ -54,7 +54,7 @@ class Motor:
                 self.play_snake(snake)
 
         else:
-            snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, self.human_player)
+            snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None, self.human_player)
             self.play_snake(snake)
 
     def play_snake(self, snake):
@@ -136,7 +136,7 @@ class Motor:
         self.snakes = [x for x in self.snakes if x.alive]
 
     def play_one_turn_for_snake(self, snake):
-        snake.set_direction(self.board.number_of_cells)
+        snake.set_direction()
         snake.update_position()
         self.board.check_if_apple_has_been_eaten(snake)
         self.board.check_if_snake_is_dead(snake)
