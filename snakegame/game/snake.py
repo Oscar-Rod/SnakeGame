@@ -98,6 +98,7 @@ class Segment:
         self.position_x = position_x
         self.position_y = position_y
 
+
 class Body:
     def __init__(self, length, head_x, head_y, speed_x, speed_y):
         self.length = length

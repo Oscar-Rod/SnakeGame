@@ -1,0 +1,4 @@
+pip=19.3.1
+pygame=1.9.6
+setuptools=42.0.2
+numpy=1.17.4

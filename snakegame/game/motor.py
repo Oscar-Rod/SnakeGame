@@ -10,7 +10,7 @@ from snakegame.neural_network.geneticalgorithm import Breeder
 
 
 class Motor:
-    def __init__(self, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
+    def __init__(self, resolution, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
                  number_of_cells=40, cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5,
                  human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1,
                  number_of_snakes_to_save=10, perception=None, training=False):
@@ -27,33 +27,31 @@ class Motor:
         self.perception = perception
         self.training = training
         self.board = Board(number_of_cells)
-        if human_player or show_screen:
-            self.painter = Painter(pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
-                                   frames_per_second)
+        self.painter = Painter(pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
+                               frames_per_second, resolution)
 
     def play_game(self):
 
-        if not self.human_player:
-            if self.training:
-                self.snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
-                                                         self.snake_speed, self.perception, self.human_player)
-
-                for i in range(self.number_of_generations):
-                    self.play_generation(i + 1)
-                    new_snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
-                                                            self.snake_speed, self.perception, self.human_player)
-                    self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
-
-                self.save_best_snakes()
-            else:
-                snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None,
-                                                   self.human_player)
-                self.load_from_file(snake, self.perception)
-                self.play_snake(snake)
-
+        if self.training:
+            self.train()
         else:
-            snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None, self.human_player)
-            self.play_snake(snake)
+            self.play()
+
+    def train(self):
+        self.snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
+                                                 self.snake_speed, self.perception, self.human_player)
+        for i in range(self.number_of_generations):
+            self.play_generation(i + 1)
+            new_snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
+                                                    self.snake_speed, self.perception, self.human_player)
+            self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
+        self.save_best_snakes()
+
+    def play(self):
+        snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None, self.human_player)
+        if not self.human_player:
+            self.load_from_file(snake, self.perception)
+        self.play_snake(snake)
 
     def play_snake(self, snake):
         game_over = False
