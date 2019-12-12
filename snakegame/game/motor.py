@@ -7,6 +7,7 @@ import pygame
 from snakegame.game.board import Board
 from snakegame.game.painter import Painter
 from snakegame.neural_network.geneticalgorithm import Breeder
+from snakegame.game.button import Button
 
 
 class Motor:
@@ -108,6 +109,7 @@ class Motor:
 
                 for event in pygame.event.get():
                     self.check_for_exit(event)
+                    Button.pass_event_to_all_buttons(event)
 
                 self.painter.paint(self.snakes)
 
