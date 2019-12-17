@@ -9,10 +9,13 @@ colors_dictionary = {
 
 
 class Button:
+    stop_the_game = "Button to stop the game"
+    start_the_game = "Button to start the game"
 
     all_buttons = []
 
-    def __init__(self, text, text_color, color, center, width, height, screen):
+    def __init__(self, action_on_click, text, text_color, color, center, width, height, screen):
+        self.action_on_click = action_on_click
         self.text = text
         self.text_color = colors_dictionary.get(text_color)
         self.color = colors_dictionary.get(color)
@@ -23,30 +26,32 @@ class Button:
         self.font = pygame.font.Font("freesansbold.ttf", 20)
         self.text_surface = None
         self.rect = None
-        self._update(self.color)
+        self._update(self.text, self.color)
         self.draw()
         Button.all_buttons.append(self)
 
     @staticmethod
     def pass_event_to_all_buttons(event):
+        list_of_actions_to_do = []
         for button in Button.all_buttons:
-            button.handle_event(event)
+            list_of_actions_to_do.append(button.handle_event(event))
+        return list_of_actions_to_do
 
     def draw(self):
-        self._update(self.color)
+        self._update(self.text, self.color)
         self.screen.blit(self.text_surface, self.rect)
 
-    def _update(self, color):
+    def _update(self, text, color):
         self.color = color
+        self.text = text
         pygame.draw.rect(self.screen, self.color, (
             self.center[0] - self.width / 2, self.center[1] - self.height / 2,
             self.width, self.height))
-        self.text_surface = self.font.render("Start", True, self.text_color)
+        self.text_surface = self.font.render(self.text, True, self.text_color)
         self.rect = self.text_surface.get_rect(center=(self.center[0], self.center[1]))
 
     def handle_event(self, event):
-        print(event)
         if event.type is not pygame.MOUSEBUTTONDOWN:
-            return []
+            return None
         if self.rect.collidepoint(event.pos):
-            self._update(colors_dictionary.get("white"))
+            return self.action_on_click

@@ -1,12 +1,13 @@
+import pygame
+
 from snakegame.game.button import Button
 
 
 class Painter:
 
-    def __init__(self, pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
+    def __init__(self, cell_size, number_of_cells, snake_color, apple_color, background_color,
                  frames_per_second, resolution):
-        self.pygame = pygame
-        self.pygame.init()
+        pygame.init()
         self.cell_size = cell_size
         self.number_of_cells = number_of_cells
         self.map_size = int(cell_size * (number_of_cells + 4))
@@ -35,13 +36,13 @@ class Painter:
             for snake in snakes:
                 segments = snake.get_segments()
                 for segment in segments:
-                    self.pygame.draw.rect(self.screen, self.snake_color, (
+                    pygame.draw.rect(self.screen, self.snake_color, (
                         (segment.position_x * self.cell_size + self.upper_left_corner_of_playable_game[0]),
                         (segment.position_y * self.cell_size + self.upper_left_corner_of_playable_game[1]),
                         self.cell_size,
                         self.cell_size))
 
-                self.pygame.draw.rect(self.screen, self.apple_color, (
+                pygame.draw.rect(self.screen, self.apple_color, (
                     (snake.apple.position_x * self.cell_size + self.upper_left_corner_of_playable_game[0]),
                     (snake.apple.position_y * self.cell_size + self.upper_left_corner_of_playable_game[1]),
                     self.cell_size,
@@ -49,26 +50,26 @@ class Painter:
 
         self.clock.tick(self.frames_per_second)
 
-        self.pygame.display.update()
+        pygame.display.update()
 
     def paints_limits_of_the_playable_zone(self):
 
-        self.pygame.draw.lines(self.screen, self.snake_color, True,
-                               [[self.center_of_playable_zone_x - self.length_of_playable_zone / 2,
-                                 self.center_of_playable_zone_y - self.length_of_playable_zone / 2],
-                                [self.center_of_playable_zone_x + self.length_of_playable_zone / 2,
-                                 self.center_of_playable_zone_y - self.length_of_playable_zone / 2],
-                                [self.center_of_playable_zone_x + self.length_of_playable_zone / 2,
-                                 self.center_of_playable_zone_y + self.length_of_playable_zone / 2],
-                                [self.center_of_playable_zone_x - self.length_of_playable_zone / 2,
-                                 self.center_of_playable_zone_y + self.length_of_playable_zone / 2]])
+        pygame.draw.lines(self.screen, self.snake_color, True,
+                          [[self.center_of_playable_zone_x - self.length_of_playable_zone / 2,
+                            self.center_of_playable_zone_y - self.length_of_playable_zone / 2],
+                           [self.center_of_playable_zone_x + self.length_of_playable_zone / 2,
+                            self.center_of_playable_zone_y - self.length_of_playable_zone / 2],
+                           [self.center_of_playable_zone_x + self.length_of_playable_zone / 2,
+                            self.center_of_playable_zone_y + self.length_of_playable_zone / 2],
+                           [self.center_of_playable_zone_x - self.length_of_playable_zone / 2,
+                            self.center_of_playable_zone_y + self.length_of_playable_zone / 2]])
 
     def paints_limits_of_the_game(self):
-        self.pygame.draw.lines(self.screen, self.snake_color, True,
-                               [[self.resolution[0] * self.limit_of_the_game, 0],
-                                [self.resolution[0], 0],
-                                [self.resolution[0], self.resolution[1]],
-                                [self.resolution[0] * self.limit_of_the_game, self.resolution[1]]])
+        pygame.draw.lines(self.screen, self.snake_color, True,
+                          [[self.resolution[0] * self.limit_of_the_game, 0],
+                           [self.resolution[0], 0],
+                           [self.resolution[0], self.resolution[1]],
+                           [self.resolution[0] * self.limit_of_the_game, self.resolution[1]]])
 
     def paint_buttons(self):
         for button in self.buttons:
@@ -82,10 +83,12 @@ class Painter:
         center_of_the_start_button = (center_of_the_buttons_area[0] - button_width / 2, center_of_the_buttons_area[1])
         center_of_the_stop_button = (center_of_the_buttons_area[0] + button_width / 2, center_of_the_buttons_area[1])
 
-        start_button = Button("Start", "black", "green", center_of_the_start_button, button_width, button_height,
+        start_button = Button(Button.start_the_game, "Start", "black", "green", center_of_the_start_button,
+                              button_width, button_height,
                               self.screen)
 
-        stop_button = Button("Stop", "black", "red", center_of_the_stop_button, button_width, button_height,
+        stop_button = Button(Button.stop_the_game, "Stop", "black", "red", center_of_the_stop_button, button_width,
+                             button_height,
                              self.screen)
         buttons.append(start_button)
         buttons.append(stop_button)

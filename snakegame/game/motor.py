@@ -5,13 +5,14 @@ import sys
 import pygame
 
 from snakegame.game.board import Board
+from snakegame.game.button import Button
 from snakegame.game.painter import Painter
 from snakegame.neural_network.geneticalgorithm import Breeder
-from snakegame.game.button import Button
 
 
 class Motor:
-    def __init__(self, resolution, snake_speed, show_screen=True, snake_color=(255, 255, 255), background_color=(0, 0, 0),
+    def __init__(self, resolution, snake_speed, show_screen=True, snake_color=(255, 255, 255),
+                 background_color=(0, 0, 0),
                  number_of_cells=40, cell_size=15, frames_per_second=60, apple_color=(0, 255, 0), snake_initial_size=5,
                  human_player=True, number_of_generations=10, number_of_snakes=10, mutation_rate=0.1,
                  number_of_snakes_to_save=10, perception=None, training=False):
@@ -28,10 +29,19 @@ class Motor:
         self.perception = perception
         self.training = training
         self.board = Board(number_of_cells)
-        self.painter = Painter(pygame, cell_size, number_of_cells, snake_color, apple_color, background_color,
+        self.painter = Painter(cell_size, number_of_cells, snake_color, apple_color, background_color,
                                frames_per_second, resolution)
 
     def play_game(self):
+
+        self.painter.paint([])
+        start = False
+        while not start:
+            for event in pygame.event.get():
+                self.check_for_exit(event)
+                actions_list = Button.pass_event_to_all_buttons(event)
+                if Button.start_the_game in actions_list:
+                    start = True
 
         if self.training:
             self.train()
@@ -42,11 +52,35 @@ class Motor:
         self.snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
                                                  self.snake_speed, self.perception, self.human_player)
         for i in range(self.number_of_generations):
-            self.play_generation(i + 1)
+            self.train_generation(i + 1)
             new_snakes = self.board.generate_snakes(self.number_of_snakes, self.snake_initial_size,
                                                     self.snake_speed, self.perception, self.human_player)
             self.snakes = self.breeder.mutate_snakes(new_snakes, self.dead_snakes)
         self.save_best_snakes()
+
+    def train_generation(self, gen):
+        print("GENERATION: " + str(gen))
+        game_over = False
+        self.dead_snakes = []
+        while not game_over:
+            if self.show_screen:
+
+                for event in pygame.event.get():
+                    self.check_for_exit(event)
+                    actions_list = Button.pass_event_to_all_buttons(event)
+                    if Button.stop_the_game in actions_list:
+                        sys.exit()
+
+                self.painter.paint(self.snakes)
+
+            for snake in self.snakes:
+                self.play_one_turn_for_snake(snake)
+
+            self.remove_dead_snakes()
+
+            if len(self.snakes) is 0:
+                game_over = True
+                pass
 
     def play(self):
         snake = self.board.generate_snakes(1, self.snake_initial_size, self.snake_speed, None, self.human_player)
@@ -64,6 +98,9 @@ class Motor:
 
                 for event in pygame.event.get():
                     self.check_for_exit(event)
+                    actions_list = Button.pass_event_to_all_buttons(event)
+                    if Button.stop_the_game in actions_list:
+                        sys.exit()
 
                 self.play_one_turn_for_snake(snake)
 
@@ -79,6 +116,9 @@ class Motor:
                 for event in pygame.event.get():
                     self.check_for_exit(event)
                     self.update_direction(event, snake)
+                    actions_list = Button.pass_event_to_all_buttons(event)
+                    if Button.stop_the_game in actions_list:
+                        sys.exit()
 
                 snake.update_position()
                 self.board.check_if_apple_has_been_eaten(snake)
@@ -99,28 +139,6 @@ class Motor:
                 snake.set_direction("up")
             elif event.key == pygame.K_DOWN:
                 snake.set_direction("down")
-
-    def play_generation(self, gen):
-        print("GENERATION: " + str(gen))
-        game_over = False
-        self.dead_snakes = []
-        while not game_over:
-            if self.show_screen:
-
-                for event in pygame.event.get():
-                    self.check_for_exit(event)
-                    Button.pass_event_to_all_buttons(event)
-
-                self.painter.paint(self.snakes)
-
-            for snake in self.snakes:
-                self.play_one_turn_for_snake(snake)
-
-            self.remove_dead_snakes()
-
-            if len(self.snakes) is 0:
-                game_over = True
-                pass
 
     @staticmethod
     def check_for_exit(event):
